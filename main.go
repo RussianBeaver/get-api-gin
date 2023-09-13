@@ -21,7 +21,7 @@ var users = []user{
 func main() {
 	router := gin.Default()
 	router.GET("/users", getUsers)
-	router.GET("/user-id-:id", getUserByID)
+	router.GET("/user_id_:id", getUserByID)
 	router.GET("/:status", getUsersByStatus)
 	router.POST("/users", addUser)
 
@@ -29,7 +29,7 @@ func main() {
 }
 
 func getUsers(c *gin.Context) {
-	c.JSON(http.StatusOK, users)
+	c.IndentedJSON(http.StatusOK, users)
 	// context.IndentedJSON(http.StatusOK, users)
 }
 /*
@@ -43,7 +43,7 @@ func addUser(c *gin.Context) {
 	}
 
 	users = append(users, newUser)
-	c.JSON(http.StatusCreated, newUser)
+	c.IndentedJSON(http.StatusCreated, newUser)
 }
 
 func getUserByID(c *gin.Context) {
@@ -51,20 +51,24 @@ func getUserByID(c *gin.Context) {
 
 	for _, value := range users {
 		if value.ID == id {
-			c.JSON(http.StatusOK, value)
+			c.IndentedJSON(http.StatusOK, value)
 			return
 		}
 	}
-	c.JSON(http.StatusNotFound, gin.H{"messege": "user user with this id not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"messege": "user with this id not found"})
 }
 
 func getUsersByStatus(c *gin.Context) {
 	status := c.Param("status")
+	err := 1
 	
 	for _, value := range users {
 		if value.Status == status {
-			c.JSON(http.StatusOK, value)
+			c.IndentedJSON(http.StatusOK, value)
+			err = 0
 		}
 	}
-	c.JSON(http.StatusNotFound, gin.H{"messege": "user with this status not found"})
+	if err == 1 {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"messege": "user with this status not found"})
+	}
 }
