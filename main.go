@@ -18,6 +18,7 @@ func main() {
 	router.GET("/users", controllers.GetAllUsers)
 	router.POST("/user", controllers.CreateUser)
 	router.GET("/user/:id", controllers.GetUser)
+	router.PATCH("/user/:id", controllers.UpdateUser)
    // Запуск сервера
 	router.Run("localhost:8080")
 }

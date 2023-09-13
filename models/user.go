@@ -6,7 +6,12 @@ type User struct {
 	Status string  `json:"status"`
 }
 
-type CheckDataValid struct {
+type CheckUserInput struct {
 	Name   string `json:"name" binding:"required"`
 	Status string `json:"status" binding:"required"`
+}
+
+type UpdateUser struct {
+	Name   string `json:"name"`
+	Status string `json:"status"`
 }

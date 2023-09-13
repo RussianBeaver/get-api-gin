@@ -16,7 +16,7 @@ func GetAllUsers(context *gin.Context) {
 // POST /user
 // Создание пользователя
 func CreateUser(context *gin.Context) {
-	var input models.CheckDataValid
+	var input models.CheckUserInput
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -36,6 +36,25 @@ func GetUser(context *gin.Context) {
       context.JSON(http.StatusBadRequest, gin.H{"error": "user with this id not found"})
       return
    }
+
+	context.JSON(http.StatusOK, gin.H{"users": user})
+}
+// PATCH /user/:id
+// Изменениe информации
+func UpdateUser(context *gin.Context) {
+	var user models.User
+	if err := models.DB.Where("id = ?", context.Param("id")).First(&user).Error; err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "user with this id not found"})
+		return
+	}
+
+	var input models.UpdateUser
+	if err := context.ShouldBindJSON(&input); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	models.DB.Model(&user).Update(input)
 
 	context.JSON(http.StatusOK, gin.H{"users": user})
 }
