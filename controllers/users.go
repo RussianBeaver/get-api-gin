@@ -5,14 +5,16 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 )
-
+// GET /users
+// Получаем список всех пользователей
 func GetAllUsers(context *gin.Context) {
 	var users []models.User
 	models.DB.Find(&users)
 
 	context.JSON(http.StatusOK, gin.H{"users": users})
 }
-
+// POST /user
+// Создание пользователя
 func CreateUser(context *gin.Context) {
 	var input models.CheckDataValid
 	if err := context.ShouldBindJSON(&input); err != nil {
@@ -22,6 +24,18 @@ func CreateUser(context *gin.Context) {
 
 	user := models.User{Name: input.Name, Status: input.Status}
 	models.DB.Create(&user)
+
+	context.JSON(http.StatusOK, gin.H{"users": user})
+}
+// GET /user/:id
+// Получение одного пользователя по ID
+func GetUser(context *gin.Context) {
+   // Проверяем имеется ли запись
+   var user models.User
+   if err := models.DB.Where("id = ?", context.Param("id")).First(&user).Error; err != nil {
+      context.JSON(http.StatusBadRequest, gin.H{"error": "user with this id not found"})
+      return
+   }
 
 	context.JSON(http.StatusOK, gin.H{"users": user})
 }

@@ -12,11 +12,12 @@ import (
 
 func main() {
 	router := gin.Default()
-
+   // Подключение к базе данных
 	models.ConnectDatabase()
-
+   // Маршруты
 	router.GET("/users", controllers.GetAllUsers)
 	router.POST("/user", controllers.CreateUser)
-
+	router.GET("/user/:id", controllers.GetUser)
+   // Запуск сервера
 	router.Run("localhost:8080")
 }
