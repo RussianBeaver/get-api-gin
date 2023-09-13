@@ -1,74 +1,22 @@
 package main
+//   docker run --name postgres_db  -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=usersDB -d postgres
+
+// https://medium.com/@com.berdin/%D1%81%D1%82%D1%80%D0%BE%D0%B8%D0%BC-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9-golang-restful-api-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-c-gin-postgres-%D0%B8-gorm-e76ac21c275e
+
 
 import (
-	"net/http"
-
+	"get-api-gin/models"
+	"get-api-gin/controllers"
 	"github.com/gin-gonic/gin"
 )
 
-type user struct {
-	ID     string  `json:"id"`
-	Name   string  `json:"name"`
-	Status string  `json:"status"`
-}
-
-var users = []user{
-	{ID: "1", Name: "Cringe Master", Status: "admin"},
-	{ID: "2", Name: "John Doe", Status: "user"},
-	{ID: "3", Name: "Julian Paul Assange", Status: "user"},
-}
-
 func main() {
 	router := gin.Default()
-	router.GET("/users", getUsers)
-	router.GET("/user_id_:id", getUserByID)
-	router.GET("/:status", getUsersByStatus)
-	router.POST("/users", addUser)
+
+	models.ConnectDatabase()
+
+	router.GET("/users", controllers.GetAllUsers)
+	router.POST("/user", controllers.CreateUser)
 
 	router.Run("localhost:8080")
-}
-
-func getUsers(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, users)
-	// context.IndentedJSON(http.StatusOK, users)
-}
-/*
-The function’s first argument is the HTTP status code you want to send to the client. Here, you’re passing the StatusOK constant from the net/http package to indicate 200 OK.
-*/
-func addUser(c *gin.Context) {
-	var newUser user
-
-	if err := c.BindJSON(&newUser); err != nil {
-		return
-	}
-
-	users = append(users, newUser)
-	c.IndentedJSON(http.StatusCreated, newUser)
-}
-
-func getUserByID(c *gin.Context) {
-	id := c.Param("id")
-
-	for _, value := range users {
-		if value.ID == id {
-			c.IndentedJSON(http.StatusOK, value)
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"messege": "user with this id not found"})
-}
-
-func getUsersByStatus(c *gin.Context) {
-	status := c.Param("status")
-	err := 1
-	
-	for _, value := range users {
-		if value.Status == status {
-			c.IndentedJSON(http.StatusOK, value)
-			err = 0
-		}
-	}
-	if err == 1 {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"messege": "user with this status not found"})
-	}
 }
