@@ -29,7 +29,7 @@ func CreateUser(context *gin.Context) {
 }
 // GET /user/:id
 // Получение одного пользователя по ID
-func GetUser(context *gin.Context) {
+func GetUserByID(context *gin.Context) {
    // Проверяем имеется ли запись
    var user models.User
    if err := models.DB.Where("id = ?", context.Param("id")).First(&user).Error; err != nil {
@@ -70,4 +70,16 @@ func DeleteUser (context *gin.Context) {
 	models.DB.Delete(&user)
 
 	context.JSON(http.StatusOK, gin.H{"users": true})
+}
+// GET /users/:name
+//вывод пользователей по имени
+func GetUsersByName(context *gin.Context) {
+	// Проверяем имеется ли запись
+	var users []models.User
+	if err := models.DB.Where("name = ?", context.Param("name")).Find(&users).Error; err != nil {
+		 context.JSON(http.StatusBadRequest, gin.H{"error": "user with this id not found"})
+		 return
+	}
+
+ context.JSON(http.StatusOK, gin.H{"users": users})
 }

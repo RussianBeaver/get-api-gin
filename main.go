@@ -17,7 +17,8 @@ func main() {
    // Маршруты
 	router.GET("/users", controllers.GetAllUsers)
 	router.POST("/user", controllers.CreateUser)
-	router.GET("/user/:id", controllers.GetUser)
+	router.GET("/user/:id", controllers.GetUserByID)
+	router.GET("/users/:name", controllers.GetUsersByName)
 	router.PATCH("/user/:id", controllers.UpdateUser)
 	router.DELETE("/user/:id", controllers.DeleteUser)
    // Запуск сервера
