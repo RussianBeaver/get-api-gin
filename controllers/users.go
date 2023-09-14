@@ -76,10 +76,7 @@ func DeleteUser (context *gin.Context) {
 func GetUsersByName(context *gin.Context) {
 	// Проверяем имеется ли запись
 	var users []models.User
-	if err := models.DB.Where("name = ?", context.Param("name")).Find(&users).Error; err != nil {
-		 context.JSON(http.StatusBadRequest, gin.H{"error": "user with this id not found"})
-		 return
-	}
+	models.DB.Where("name = ?", context.Param("name")).Find(&users)
 
- context.JSON(http.StatusOK, gin.H{"users": users})
+ 	context.JSON(http.StatusOK, gin.H{"users": users})
 }
