@@ -16,11 +16,12 @@ func main() {
 	models.ConnectDatabase()
    // Маршруты
 	router.GET("/users", controllers.GetAllUsers)
-	router.POST("/user", controllers.CreateUser)
-	router.GET("/user/:id", controllers.GetUserByID)
-	router.GET("/users/:name", controllers.GetUsersByName)
-	router.PATCH("/user/:id", controllers.UpdateUser)
-	router.DELETE("/user/:id", controllers.DeleteUser)
+	router.GET("/user/id/:id", controllers.GetUserByID)
+	router.GET("/users/name/:name", controllers.GetUsersByName)
+	router.GET("/users/status/:status", controllers.GetUsersByStatus)
+	router.POST("/user/", controllers.CreateUser)
+	router.PATCH("/user/id/:id", controllers.UpdateUser)
+	router.DELETE("/user/id/:id", controllers.DeleteUser)
    // Запуск сервера
 	router.Run("localhost:8080")
 }

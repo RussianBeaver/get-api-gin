@@ -80,3 +80,12 @@ func GetUsersByName(context *gin.Context) {
 
  	context.JSON(http.StatusOK, gin.H{"users": users})
 }
+// GET /users/:status
+//вывод пользователей по статусу
+func GetUsersByStatus(context *gin.Context) {
+	// Проверяем имеется ли запись
+	var users []models.User
+	models.DB.Where("status = ?", context.Param("status")).Find(&users)
+
+ 	context.JSON(http.StatusOK, gin.H{"users": users})
+}
