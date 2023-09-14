@@ -19,6 +19,7 @@ func main() {
 	router.POST("/user", controllers.CreateUser)
 	router.GET("/user/:id", controllers.GetUser)
 	router.PATCH("/user/:id", controllers.UpdateUser)
+	router.DELETE("/user/:id", controllers.DeleteUser)
    // Запуск сервера
 	router.Run("localhost:8080")
 }
